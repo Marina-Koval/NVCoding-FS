@@ -1,0 +1,99 @@
+﻿@using Portal.Web.Localization
+
+@{
+    ViewBag.Title = Localization.Organising;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section id="vapp">
+    @* Will be autogenerate in app *@
+</section>
+
+@section Scripts{
+    <script>
+        window.localization = {
+            at: '@Html.Raw(Localization.At)',
+            employee: '@Html.Raw(Localization.Employee)',
+            about: '@Html.Raw(Localization.About)',
+            time: '@Html.Raw(Localization.Time)',
+            completion: '@Html.Raw(Localization.Completion)',
+            companyLogo: '@Html.Raw(Localization.CompanyLogo)',
+            companyOwner: '@Html.Raw(Localization.CompanyOwner)',
+            companyColorTheme: '@Html.Raw(Localization.CompanyColorTheme)',
+            companyURL: '@Html.Raw(Localization.CompanyURL)',
+            hoursStudied: '@Html.Raw(Localization.HoursStudied)',
+            year: '@Html.Raw(Localization.Year)',
+            month: '@Html.Raw(Localization.Month)',
+            week: '@Html.Raw(Localization.Week)',
+            products: '@Html.Raw(Localization.Products)',
+            webinars: '@Html.Raw(Localization.Webinars)',
+            ecourses: '@Html.Raw(Localization.ECourse)',
+            events: '@Html.Raw(Localization.Events)',
+            healthSafety: '@Html.Raw(Localization.HealthSafety)',
+            IT: '@Html.Raw(Localization.IT)',
+            marketing: '@Html.Raw(Localization.Marketing)',
+            management: '@Html.Raw(Localization.Management)',
+            notStarted: '@Html.Raw(Localization.NotStarted)',
+            started: '@Html.Raw(Localization.Started)',
+            completed: '@Html.Raw(Localization.Completed)',
+            notPassed: '@Html.Raw(Localization.NotPassed)',
+            ongoing: '@Html.Raw(Localization.Ongoing)',
+            findCourse: '@Html.Raw(Localization.FindCourse)',
+            topics: '@Html.Raw(Localization.Topics)',
+            lifeTimeline: '@Html.Raw(Localization.LifeTimeline)',
+            active: '@Html.Raw(Localization.Active)',
+            noRewardsToDisplay: '@Html.Raw(Localization.NoRewardsToDisplay)',
+            search: '@Html.Raw(Localization.Search)',
+            inputNameOfCompany: '@Html.Raw(Localization.InputNameOfCompany)',
+            startTypingToSearchCompany: '@Html.Raw(Localization.StartTypingToSearchCompany)',
+            startTypingToSearchRole: '@Html.Raw(Localization.StartTypingToSearchRole)',
+            startTypingToSearchGroup: '@Html.Raw(Localization.StartTypingToSearchGroup)',
+            inputNameOfRole: '@Html.Raw(Localization.InputNameOfRole)',
+            thereAreNoSuchGroup: '@Html.Raw(Localization.ThereAreNoSuchGroup)',
+            inputNameOfGroup: '@Html.Raw(Localization.InputNameOfGroup)',
+
+            //tabs
+            profile: '@Html.Raw(Localization.Profile)',
+            courses: '@Html.Raw(Localization.Courses)',
+            access: '@Html.Raw(Localization.Access)',
+            rewards: '@Html.Raw(Localization.Rewards)',
+            results: '@Html.Raw(Localization.Results)',
+            preferences: '@Html.Raw(Localization.Preferences)',
+
+            //access
+            groups: '@Html.Raw(Localization.Groups)',
+            roles: '@Html.Raw(Localization.Roles)',
+            save: '@Html.Raw(Localization.Save)',
+            paymentMethods: '@Html.Raw(Localization.PaymentMethods)',
+            admin: '@Html.Raw(Localization.Admin)',
+            study: '@Html.Raw(Localization.Study)',
+            removeFromCompany: '@Html.Raw(Localization.RemoveFromCompany)',
+            nothingWasFound: '@Localization.NothingWasFound',
+            areYouSureRemoveUserFromCompany: '@Html.Raw(Localization.AreYouSureRemoveUserFromCompany)',
+            userCanPurchaseCompanyInvoice: '@Html.Raw(Localization.UserCanPurchaseCompanyInvoice)',
+            userBelongsToCompany: '@Html.Raw(Localization.UserBelongsToCompany)',
+            changeTheCompanyToTheUser: '@Html.Raw(Localization.ChangeTheCompanyToTheUser)',
+            areYouSureYouWantToMoveThisUser: '@Html.Raw(Localization.AreYouSureYouWantToMoveThisUser)',
+
+            //preferences
+            SfxOnOff: '@Html.Raw(Localization.SfxOnOff)',
+            Site: '@Html.Raw(Localization.Site)',
+            ProfileSettings: '@Html.Raw(Localization.Profile)',
+            Security : '@Html.Raw(Localization.Security)',
+            Languages: '@Html.Raw(Localization.Preferences)',
+            Language: '@Html.Raw(Localization.Language)',
+            Company: '@Html.Raw(Localization.Company)',
+            Notification: '@Html.Raw(Localization.Notification)',
+            PaymentMethods: '@Html.Raw(Localization.PaymentMethods)',
+            BillingHistory: '@Html.Raw(Localization.BillingHistory)',
+            PayoutMethods: '@Html.Raw(Localization.PayoutMethods)',
+            PayoutHistory: '@Html.Raw(Localization.PayoutHistory)',
+            Save: '@Html.Raw(Localization.Save)',
+
+            noRewards: '@Html.Raw(Localization.NoRewards)'
+        };
+            window.ViewModel = @(Html.Raw(Json.Encode(Model))) || null;
+    </script>
+    
+    <script src="~/Scripts/Bundle/SupportOrganising.bundle.js" defer></script>
+}

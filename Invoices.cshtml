@@ -1,0 +1,243 @@
+﻿@using Portal.Web.Localization
+
+@{
+    ViewBag.Title = "Invoices";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/css/Views/Sale/saleInvoices.css" rel="stylesheet" />
+
+<main id="sale_invoices" v-cloak>
+
+    <vaside>
+        <div slot="filters" class="flex flex_column">
+            @* Invoice number/company name input filter *@
+            <input id="search_filter" type="text" v-model="filterString" />
+            @* Companies dropdown *@
+            <vselect :options="companiesFilter"
+                     v-on:onselected="companySelected"></vselect>
+            @* Own invoices switcher *@
+
+            @* Counters of paid/unpaid/overdue invoices *@
+            <div>
+
+            </div>
+        </div>
+
+        <div slot="total" class="aside__total pd10">
+            <div class="flex flex_row flex_space_btwn paid_count_label">
+                <div>
+                    @Localization.Paid
+                </div>
+                <div>
+                    {{count.paid}}
+                </div>
+            </div>
+            <div class="flex flex_row flex_space_btwn unpaid_count_label">
+                <div>
+                    @Localization.Unpaid
+                </div>
+                <div>
+                    {{count.unpaid}}
+                </div>
+            </div>
+            <div class="flex flex_row flex_space_btwn overdue_count_label">
+                <div>
+                    @Localization.Overdue
+                </div>
+                <div>
+                    {{count.overdue}}
+                </div>
+            </div>
+        </div>
+
+
+
+        <div slot="row" class="aside__row" v-for="(item, index) of filteredInvoices" :key="index" ref="aside" style="height: auto;" v-on:click="invoiceSelected(item)">
+            <invoice :invoice="item"></invoice>
+        </div>
+    </vaside>
+
+    <div class="flex flex_column width100percents margin_left_300 right_block_body">
+        <div class="top_bar flex flex_row flex_space_btwn">
+            
+            <div></div>
+            <div class="flex flex_row tool_block">
+                <div class="flex flex_column single_tool">
+                    <i class="ion-email tool_icon"></i>
+                    <span>@Localization.Delivered</span>
+                    
+                </div>
+                <div class="flex flex_column single_tool" v-on:click="resendReminder">
+                    <i class="ion-paper-airplane tool_icon"></i>
+                    <span>@Localization.Resend</span>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex_row invoice_details_block">
+            <div class="flex2 flex flex_center invoice_container">
+                @* Invoice document *@
+                <document v-if="documentData !== null" :localization="documentLocalization"
+                          :documentdata="documentData"></document>
+                <div v-else>
+                    No data
+                </div>
+                </div>
+            <div class="flex1">
+                @* Activities *@
+                <div class="email_analytics_label">
+                    @Localization.SendersActivity.ToUpper()
+                </div>
+                <div v-if="analytics.firstSentTime !== null">
+                    <div class="flex flex_row flex_space_btwn first_sent_label">
+                        <div>
+                            @Localization.FirstSent
+                        </div>
+                        <div>
+                            {{getFormattedDate(analytics.FirstSentTime)}}
+                        </div>
+                    </div>
+                    <div v-if="analytics.WasFirstAutoReminder" class="flex flex_row flex_space_btwn reminder_label">
+                        <div>
+                            @Localization.AutoReminder 1
+                        </div>
+                        <div>
+                            {{getFormattedDate(analytics.FirstReminderTime)}}
+                        </div>
+                    </div>
+                    <div v-if="analytics.WasSecondAutoReminder" class="flex flex_row flex_space_btwn reminder_label">
+                        <div>
+                            @Localization.AutoReminder 2
+                        </div>
+                        <div>
+                            {{getFormattedDate(analytics.SecondReminderTime)}}
+                        </div>
+                    </div>
+                    <div v-if="analytics.WasThirdAutoReminder" class="flex flex_row flex_space_btwn reminder_label">
+                        <div>
+                            @Localization.AutoReminder 3
+                        </div>
+                        <div>
+                            {{getFormattedDate(analytics.ThirdReminderTime)}}
+                        </div>
+                    </div>
+                    <div v-if="analytics.WasManualResend" class="flex flex_row flex_space_btwn reminder_label">
+                        <div>
+                            @Localization.ManualResend
+                        </div>
+                        <div>
+                            {{getFormattedDate(analytics.ManualReminderTime)}}
+                        </div>
+                    </div>
+                </div>
+                <div v-else>
+                    No data
+                </div>
+                    <div class="email_analytics_label activity_label">
+                        @Localization.RecipientsActivity.ToUpper()
+                    </div>
+                    <div>
+                        <div class="total_labels">
+                            @Localization.TotalOpens: {{analytics.TotalOpens}}
+                        </div>
+                        <div v-if="analytics.OpensData !== undefined && analytics.OpensData.length > 0">
+                            <div v-for="(item, index) in analytics.OpensData" :key="index" class="tracking_details">
+                                <div>
+                                    {{item.Date}}
+                                </div>
+                                <div>
+                                    {{item.Location}}
+                                </div>
+                                <div>
+                                    {{item.Client}}
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else class="tracking_details">
+                            No data
+                        </div>
+                        <div class="total_labels clicks_label">
+                            @Localization.TotalClicks: {{analytics.TotalClicks}}
+                        </div>
+                        <div v-if="analytics.ClicksData !== undefined && analytics.ClicksData.length > 0">
+                            <div v-for="(item, index) in analytics.ClicksData" :key="index" class="tracking_details">
+                                <div>
+                                    {{item.Date}}
+                                </div>
+                                <div>
+                                    {{item.Location}}
+                                </div>
+                                <div>
+                                    {{item.Client}}
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else class="tracking_details">
+                            No data
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    window.localization = {
+        invoiceBlock: {
+            invoiceNumber: '@Localization.InvoiceNumber',
+            issued: '@Localization.Issued',
+            expires: '@Localization.Expires',
+            opened: '@Localization.Opened',
+            unpaid: '@Localization.Unpaid',
+            overdue: '@Localization.Overdue',
+            paid: '@Localization.Paid',
+        },
+        document: {
+                orgNumber: '@Localization.OrgNumber',
+                phone: '@Localization.Phone',
+                email: '@Localization.Email',
+                website: '@Localization.Website',
+                invoiceNumber: '@Localization.InvoiceNumber',
+                invoiceDate: '@Localization.InvoiceDate',
+                clientNumber: '@Localization.ClientNumber',
+                dueDate: '@Localization.DueDate',
+                accountNumber: '@Localization.AccountNumber',
+                IBAN: '@Localization.Iban',
+                SWIFT: '@Localization.Swift',
+                KID: '@Localization.Kid',
+                paymentDetails: '@Localization.PaymentDetails',
+                orderNumber: '@Localization.OrderNumber',
+                orderDate: '@Localization.OrderDate',
+                deliveryDate: '@Localization.DeliveryDate',
+                yourContact: '@Localization.YourContact',
+                description: '@Localization.Description',
+                qty: '@Localization.Qty',
+                unitPrice: '@Localization.UnitPrice',
+                amount: '@Localization.Amount',
+                tax: '@Localization.Tax',
+                subtotal: '@Localization.Subtotal',
+                beforeTax: '@Localization.BeforeTax',
+                inclTax: '@Localization.InclTax',
+                serviceFee: '@Localization.ServiceFee',
+                sum: '@Localization.Sum',
+                taxFree: '@Localization.TaxFree',
+                taxSpecification: '@Localization.TaxSpecification',
+                amountToBePaid: '@Localization.AmountToBePaid',
+                receipt: '@Localization.Receipt.ToUpper()',
+                invoice: '@Localization.Invoice.ToUpper()',
+                paymentMethod: '@Localization.PaymentMethod',
+                status: '@Localization.Status',
+                creditCard: '@Localization.CreditCard',
+                unsavedCard: '@Localization.UnsavedCard',
+                credit: '@Localization.Credit',
+                balance: '@Localization.Balance',
+                paid: '@Localization.Paid.ToUpper()',
+                unpaid: '@Localization.Unpaid.ToUpper()',
+                amountPaid: '@Localization.AmountPaid'
+            }
+    }
+</script>
+
+<script src="~/Scripts/Bundle/saleInvoices.bundle.js">
+</script>
